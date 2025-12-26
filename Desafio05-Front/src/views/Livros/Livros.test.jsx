@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import Livros from './Livros';
 import { ToastProvider } from '../../components/Toast/ToastProvider';
 import { AuthProvider } from '../../auth/AuthContext';
+import { SettingsProvider } from '../../settings/SettingsContext';
 
 vi.mock('../../api/LivrosService', () => {
   const data = [
@@ -29,11 +30,13 @@ describe('Livros view', () => {
   it('renders list from service', async () => {
     render(
       <AuthProvider>
-        <ToastProvider>
-          <MemoryRouter>
-            <Livros />
-          </MemoryRouter>
-        </ToastProvider>
+        <SettingsProvider>
+          <ToastProvider>
+            <MemoryRouter>
+              <Livros />
+            </MemoryRouter>
+          </ToastProvider>
+        </SettingsProvider>
       </AuthProvider>
     );
 
@@ -45,11 +48,13 @@ describe('Livros view', () => {
   it('deletes after confirmation', async () => {
     render(
       <AuthProvider>
-        <ToastProvider>
-          <MemoryRouter>
-            <Livros />
-          </MemoryRouter>
-        </ToastProvider>
+        <SettingsProvider>
+          <ToastProvider>
+            <MemoryRouter>
+              <Livros />
+            </MemoryRouter>
+          </ToastProvider>
+        </SettingsProvider>
       </AuthProvider>
     );
 
