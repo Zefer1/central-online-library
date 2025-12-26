@@ -1,55 +1,50 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:3001";
+import { getStoredToken } from '../auth/AuthContext';
+
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const DEFAULT_TOKEN = import.meta.env.VITE_API_TOKEN || '';
+
+const client = axios.create({
+  baseURL: BASE_URL,
+});
+
+client.interceptors.request.use((config) => {
+  const token = getStoredToken() || DEFAULT_TOKEN;
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export class LivrosService {
-  static async getLivros() {
-    try {
-      const response = await axios.get(`${BASE_URL}/livros`);
-      return response;
-    } catch (error) {
-      console.error('Error fetching books:', error);
-      throw error;
-    }
+  static async getLivros({ page = 1, pageSize = 10, q = '', sort = 'created_at', order = 'desc', isbn = '', editora = '' } = {}) {
+    const params = { page, pageSize, sort, order };
+    if (q) params.q = q;
+    if (isbn) params.isbn = isbn;
+    if (editora) params.editora = editora;
+    const response = await client.get('/livros', { params });
+    return response.data;
   }
 
   static async getLivro(id) {
-    try {
-      const response = await axios.get(`${BASE_URL}/livros/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error fetching book ${id}:`, error);
-      throw error;
-    }
+    const response = await client.get(`/livros/${id}`);
+    return response.data;
   }
 
   static async createLivro(body) {
-    try {
-      const response = await axios.post(`${BASE_URL}/livros`, body);
-      return response;
-    } catch (error) {
-      console.error('Error creating book:', error);
-      throw error;
-    }
+    const response = await client.post('/livros', body);
+    return response.data;
   }
 
   static async updateLivro(id, body) {
-    try {
-      const response = await axios.put(`${BASE_URL}/livros/${id}`, body);
-      return response;
-    } catch (error) {
-      console.error(`Error updating book ${id}:`, error);
-      throw error;
-    }
+    const response = await client.put(`/livros/${id}`, body);
+    return response.data;
   }
 
   static async deleteLivro(id) {
-    try {
-      const response = await axios.delete(`${BASE_URL}/livros/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error deleting book ${id}:`, error);
-      throw error;
-    }
+    const response = await client.delete(`/livros/${id}`);
+    return response.data;
   }
 }
