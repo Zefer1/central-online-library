@@ -1,0 +1,35 @@
+
+.submenu {
+    width: min(var(--container), calc(100% - 32px));
+    margin: 0 auto;
+    padding: 10px 0 4px;
+}
+
+.submenu ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+}
+
+.submenu a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--text);
+    transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.submenu a:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.10);
+}
