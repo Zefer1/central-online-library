@@ -11,9 +11,11 @@ import Livros from './views/Livros/Livros';
 import LivrosCadastro from './views/LivrosCadastro/LivrosCadastro';
 import LivrosEdicao from './views/LivrosEdicao/LivrosEdicao';
 import Login from './views/Login/Login';
+import Settings from './views/Settings/Settings';
 import { ToastProvider } from './components/Toast/ToastProvider';
 import { AuthProvider } from './auth/AuthContext';
 import { RequireAuth } from './auth/RequireAuth';
+import { SettingsProvider } from './settings/SettingsContext';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,14 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
+  {
+    path: "/settings",
+    element: (
+      <RequireAuth>
+        <Settings />
+      </RequireAuth>
+    ),
+  },
 ], {
   future: {
     v7_startTransition: true,
@@ -58,9 +68,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
-      <ToastProvider>
-        <RouterProvider router={router} />
-      </ToastProvider>
+      <SettingsProvider>
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
+      </SettingsProvider>
     </AuthProvider>
   </React.StrictMode>,
 )

@@ -5,16 +5,31 @@ import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros'
 import { LivrosService } from '../../api/LivrosService'
 import { useToast } from '../../components/Toast/ToastProvider'
 import { PageTitle } from '../../components/PageTitle/PageTitle'
+import { useSettings } from '../../settings/SettingsContext'
 import "./index.scss"
 
+function mapDefaultSort(defaultSort) {
+  switch (defaultSort) {
+    case 'title':
+      return { sort: 'titulo', order: 'asc' }
+    case 'publisher':
+      return { sort: 'editora', order: 'asc' }
+    case 'newest':
+    default:
+      return { sort: 'created_at', order: 'desc' }
+  }
+}
+
 const Livros = () => {
+  const { settings } = useSettings()
   const [livros, setLivros] = useState([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [pageSize, setPageSize] = useState(() => settings.pageSize)
   const [q, setQ] = useState('')
-  const [sort, setSort] = useState('created_at')
-  const [order, setOrder] = useState('desc')
+  const initialSort = mapDefaultSort(settings.defaultSort)
+  const [sort, setSort] = useState(() => initialSort.sort)
+  const [order, setOrder] = useState(() => initialSort.order)
   const [totalPages, setTotalPages] = useState(1)
   const [error, setError] = useState('')
   const toast = useToast()
@@ -55,9 +70,18 @@ const Livros = () => {
     }
   }
 
-  useEffect(() => { 
-    getLivros() 
+  useEffect(() => {
+    getLivros()
   }, [])
+
+  useEffect(() => {
+    const nextPageSize = settings.pageSize
+    const next = mapDefaultSort(settings.defaultSort)
+    setPageSize(nextPageSize)
+    setSort(next.sort)
+    setOrder(next.order)
+    getLivros(1, q, next.sort, next.order, nextPageSize)
+  }, [settings.pageSize, settings.defaultSort])
 
   const handleSearch = (e) => {
     e.preventDefault()
