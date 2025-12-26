@@ -6,6 +6,7 @@ import { LivrosService } from '../../api/LivrosService'
 import { useToast } from '../../components/Toast/ToastProvider'
 import { PageTitle } from '../../components/PageTitle/PageTitle'
 import { useSettings } from '../../settings/SettingsContext'
+import { useTranslation } from '../../i18n/useTranslation'
 import "./index.scss"
 
 function mapDefaultSort(defaultSort) {
@@ -22,6 +23,7 @@ function mapDefaultSort(defaultSort) {
 
 const Livros = () => {
   const { settings } = useSettings()
+  const { t } = useTranslation()
   const [livros, setLivros] = useState([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
@@ -58,7 +60,7 @@ const Livros = () => {
   }
 
   async function deleteLivro(id) {
-    if (confirm(`Você realmente deseja remover o livro de ID: ${id}?`)) {
+    if (confirm(t('books.deleteConfirm', { id }))) {
       try {
         const { message } = await LivrosService.deleteLivro(id)
         toast.push({ type: 'success', message })
@@ -100,14 +102,14 @@ const Livros = () => {
       <SubmenuLivros/>
       <div className='page livros'>
         <PageTitle
-          title="Escolha o seu livro"
-          subtitle="Pesquise, ordene e navegue com paginação."
+          title={t('books.title')}
+          subtitle={t('books.subtitle')}
         />
 
         <form className='filter' onSubmit={handleSearch}>
           <input
             type="search"
-            placeholder="Buscar por título ou editora"
+            placeholder={t('books.searchPlaceholder')}
             value={q}
             onChange={(e)=>setQ(e.target.value)}
           />
@@ -120,10 +122,10 @@ const Livros = () => {
             }}
             aria-label="Ordenar por"
           >
-            <option value="created_at">Mais recentes</option>
-            <option value="titulo">Título</option>
-            <option value="editora">Editora</option>
-            <option value="num_paginas">Páginas</option>
+            <option value="created_at">{t('books.recent')}</option>
+            <option value="titulo">{t('settings.sortTitle')}</option>
+            <option value="editora">{t('books.publisher')}</option>
+            <option value="num_paginas">{t('books.pages')}</option>
           </select>
           <select
             value={order}
@@ -134,8 +136,8 @@ const Livros = () => {
             }}
             aria-label="Ordem"
           >
-            <option value="desc">Desc</option>
-            <option value="asc">Asc</option>
+            <option value="desc">{t('books.desc')}</option>
+            <option value="asc">{t('books.asc')}</option>
           </select>
           <select
             value={pageSize}
@@ -151,7 +153,7 @@ const Livros = () => {
             <option value={20}>20</option>
             <option value={50}>50</option>
           </select>
-          <button type="submit">Buscar</button>
+          <button type="submit">{t('books.search')}</button>
         </form>
 
         {loading ? (
@@ -169,7 +171,7 @@ const Livros = () => {
                 </div>
               ))}
             </div>
-            <p className="skeleton__sr">Carregando livros...</p>
+            <p className="skeleton__sr">{t('books.loading')}</p>
           </div>
         ) : error ? (
           <p className='error'>{error}</p>
@@ -190,14 +192,14 @@ const Livros = () => {
                   </li>
                 ))
               ) : (
-                <p>Nenhum livro encontrado</p>
+                <p>{t('books.noneFound')}</p>
               )}
             </ul>
 
             <div className='pagination'>
-              <button type="button" onClick={()=>goToPage(page-1)} disabled={page<=1}>Anterior</button>
-              <span>Página {page} de {totalPages}</span>
-              <button type="button" onClick={()=>goToPage(page+1)} disabled={page>=totalPages}>Próxima</button>
+              <button type="button" onClick={()=>goToPage(page-1)} disabled={page<=1}>{t('books.previous')}</button>
+              <span>{t('books.pageOf', { page, total: totalPages })}</span>
+              <button type="button" onClick={()=>goToPage(page+1)} disabled={page>=totalPages}>{t('books.next')}</button>
             </div>
           </>
         )}

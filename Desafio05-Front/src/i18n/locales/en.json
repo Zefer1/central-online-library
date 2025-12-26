@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "goToLanding": "Go to landing page",
+    "books": "Books",
+    "settings": "Settings",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Preferences saved in your browser.",
+    "sectionLabel": "Preferences",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "language": "Language",
+    "languagePt": "Portuguese",
+    "languageEn": "English",
+    "languageHint": "(Not all UI is translated yet — this saves your preference.)",
+    "pageSize": "Items per page",
+    "defaultSort": "Default sort",
+    "sortNewest": "Newest",
+    "sortTitle": "Title",
+    "sortPublisher": "Publisher",
+    "reducedMotion": "Reduce motion",
+    "reducedMotionHint": "Disables animations/transitions when possible.",
+    "reset": "Reset defaults"
+  },
+  "books": {
+    "title": "Pick your book",
+    "subtitle": "Search, sort and navigate with pagination.",
+    "searchPlaceholder": "Search by title or publisher",
+    "search": "Search",
+    "sortBy": "Sort by",
+    "order": "Order",
+    "itemsPerPage": "Items per page",
+    "recent": "Newest",
+    "publisher": "Publisher",
+    "pages": "Pages",
+    "desc": "Desc",
+    "asc": "Asc",
+    "loading": "Loading books...",
+    "noneFound": "No books found",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "deleteConfirm": "Do you really want to remove the book with ID: {id}?"
+  }
+}

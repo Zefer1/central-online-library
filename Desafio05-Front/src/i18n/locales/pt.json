@@ -1,0 +1,50 @@
+{
+  "nav": {
+    "goToLanding": "Ir para a landing page",
+    "books": "Livros",
+    "settings": "Definições",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "settings": {
+    "title": "Definições",
+    "subtitle": "Preferências guardadas no seu navegador.",
+    "sectionLabel": "Preferências",
+    "theme": "Tema",
+    "themeSystem": "Sistema",
+    "themeDark": "Escuro",
+    "themeLight": "Claro",
+    "language": "Idioma",
+    "languagePt": "Português",
+    "languageEn": "English",
+    "languageHint": "(Ainda não traduz todo o UI — guarda a preferência.)",
+    "pageSize": "Itens por página",
+    "defaultSort": "Ordenação padrão",
+    "sortNewest": "Mais recentes",
+    "sortTitle": "Título",
+    "sortPublisher": "Editora",
+    "reducedMotion": "Reduzir animações",
+    "reducedMotionHint": "Desliga transições/animações sempre que possível.",
+    "reset": "Repor padrões"
+  },
+  "books": {
+    "title": "Escolha o seu livro",
+    "subtitle": "Pesquise, ordene e navegue com paginação.",
+    "searchPlaceholder": "Buscar por título ou editora",
+    "search": "Buscar",
+    "sortBy": "Ordenar por",
+    "order": "Ordem",
+    "itemsPerPage": "Itens por página",
+    "recent": "Mais recentes",
+    "publisher": "Editora",
+    "pages": "Páginas",
+    "desc": "Desc",
+    "asc": "Asc",
+    "loading": "Carregando livros...",
+    "noneFound": "Nenhum livro encontrado",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "pageOf": "Página {page} de {total}",
+    "deleteConfirm": "Você realmente deseja remover o livro de ID: {id}?"
+  }
+}
