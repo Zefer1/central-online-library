@@ -18,6 +18,9 @@ function Header() {
         <nav className="header__nav" aria-label="Navegação principal">
           <ul className="header__links">
             <li><Link className="header__link" to="/livros">Livros</Link></li>
+            {isAuthenticated ? (
+              <li><Link className="header__link" to="/settings">Definições</Link></li>
+            ) : null}
             {!isAuthenticated ? (
               <li><Link className="btn btn--primary header__cta" to="/login">Login</Link></li>
             ) : (
