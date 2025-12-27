@@ -54,15 +54,6 @@ jobs:
           echo "POSTGRES_PORT=${{ job.services.postgres.ports[5432] }}" >> $GITHUB_ENV
           echo "DATABASE_URL=postgres://postgres:postgres@127.0.0.1:${{ job.services.postgres.ports[5432] }}/central_library" >> $GITHUB_ENV
 
-      - name: Debug env
-        run: |
-          echo "NODE_ENV=$NODE_ENV"
-          echo "DATABASE_URL=$DATABASE_URL"
-          echo "POSTGRES_HOST=$POSTGRES_HOST"
-          echo "POSTGRES_PORT=$POSTGRES_PORT"
-          echo "AUTO_CREATE_DB=$AUTO_CREATE_DB"
-          echo "SEED=$SEED"
-
       - name: Wait for Postgres
         env:
           PGPASSWORD: postgres
@@ -102,6 +93,16 @@ jobs:
 
       - name: Test
         run: npm test
+
+      - name: Debug env (on failure)
+        if: failure()
+        run: |
+          echo "NODE_ENV=$NODE_ENV"
+          echo "DATABASE_URL=$DATABASE_URL"
+          echo "POSTGRES_HOST=$POSTGRES_HOST"
+          echo "POSTGRES_PORT=$POSTGRES_PORT"
+          echo "AUTO_CREATE_DB=$AUTO_CREATE_DB"
+          echo "SEED=$SEED"
 
   front:
     name: Frontend (lint/test/build)
