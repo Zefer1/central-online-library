@@ -68,12 +68,6 @@ jobs:
           PGPASSWORD: postgres
         run: |
           set -e
-          echo "Hosts entry for service name (informational):"
-          getent hosts postgres || true
-
-          echo "Docker containers (including services):"
-          docker ps -a || true
-
           if [ -z "${POSTGRES_PORT:-}" ]; then
             echo "POSTGRES_PORT is empty; cannot wait for Postgres." >&2
             exit 1
@@ -105,12 +99,6 @@ jobs:
 
           echo "Postgres is ready; checking with psql..."
           psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U postgres -d central_library -c "SELECT 1;"
-
-      - name: Debug docker services
-        if: always()
-        run: |
-          docker ps -a || true
-          docker images | head -n 20 || true
 
       - name: Test
         run: npm test
