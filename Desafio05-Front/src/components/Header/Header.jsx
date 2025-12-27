@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from "../../assets/logo.png";
 import { useAuth } from '../../auth/AuthContext';
@@ -24,7 +23,10 @@ function Header() {
               <li><Link className="header__link" to="/settings">{t('nav.settings')}</Link></li>
             ) : null}
             {!isAuthenticated ? (
-              <li><Link className="btn btn--primary header__cta" to="/login">{t('nav.login')}</Link></li>
+              <>
+                <li><Link className="btn btn--secondary header__cta" to="/register">{t('nav.register')}</Link></li>
+                <li><Link className="btn btn--primary header__cta" to="/login">{t('nav.login')}</Link></li>
+              </>
             ) : (
               <li>
                 <button type="button" className="btn btn--secondary header__cta" onClick={logout}>

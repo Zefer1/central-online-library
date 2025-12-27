@@ -1,0 +1,48 @@
+.book-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.book-detail__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.book-detail__subtitle {
+  color: var(--muted, #6b7280);
+}
+
+.book-detail__links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.book-detail__link {
+  color: #0ea5e9;
+}
+
+.book-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.book-detail__card {
+  padding: 1.5rem;
+  border: 1px solid var(--border, #1f2937);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
+}
+
+.book-detail__line {
+  margin: 0.15rem 0;
+}
+
+.book-detail__muted {
+  color: var(--muted, #9ca3af);
+  margin-top: 0.5rem;
+}

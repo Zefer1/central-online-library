@@ -58,4 +58,16 @@
     opacity: 0.7;
     cursor: not-allowed;
   }
+
+  .login__footer {
+    margin: 10px 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+
+    a {
+      color: inherit;
+      font-weight: 800;
+      text-decoration: underline;
+    }
+  }
 }

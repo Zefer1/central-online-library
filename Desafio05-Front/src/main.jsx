@@ -1,4 +1,4 @@
-import React from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -10,7 +10,9 @@ import Home from './views/Home/Home';
 import Livros from './views/Livros/Livros';
 import LivrosCadastro from './views/LivrosCadastro/LivrosCadastro';
 import LivrosEdicao from './views/LivrosEdicao/LivrosEdicao';
+import BookDetail from './views/BookDetail/BookDetail';
 import Login from './views/Login/Login';
+import Register from './views/Register/Register';
 import Settings from './views/Settings/Settings';
 import { ToastProvider } from './components/Toast/ToastProvider';
 import { AuthProvider } from './auth/AuthContext';
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Landing />,
+  },
+  {
+    path: "/livros/detalhe/:livroId",
+    element: <BookDetail />,
   },
   {
     path: "/home",
@@ -51,6 +57,10 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/register",
+    element: <Register />,
+  },
+  {
     path: "/settings",
     element: (
       <RequireAuth>
@@ -66,7 +76,7 @@ const router = createBrowserRouter([
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <StrictMode>
     <AuthProvider>
       <SettingsProvider>
         <ToastProvider>
@@ -74,5 +84,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </ToastProvider>
       </SettingsProvider>
     </AuthProvider>
-  </React.StrictMode>,
+  </StrictMode>,
 )

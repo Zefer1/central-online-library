@@ -1,13 +1,9 @@
 import request from 'supertest';
-import { describe, it, beforeAll, afterAll, expect } from 'vitest';
-import { pool } from '../db.js';
+import { describe, it, beforeAll, beforeEach, expect } from 'vitest';
+import { __resetDbForTests } from './setup.js';
 
 let app;
 let ready;
-
-async function resetDb() {
-  await pool.query('TRUNCATE livros RESTART IDENTITY');
-}
 
 describe('Livros API', () => {
   beforeAll(async () => {
@@ -22,11 +18,10 @@ describe('Livros API', () => {
     app = mod.app;
     ready = mod.ready;
     await ready;
-    await resetDb();
   });
 
-  afterAll(async () => {
-    await pool.end();
+  beforeEach(async () => {
+    await __resetDbForTests();
   });
 
   it('rejects write without auth token', async () => {
@@ -61,7 +56,7 @@ describe('Livros API', () => {
     const list = await request(app).get('/livros');
     expect(list.status).toBe(200);
     expect(Array.isArray(list.body.data)).toBe(true);
-    expect(list.body.data.length).toBe(1);
+    expect(list.body.data.length).toBe(2); // includes seeded book from global setup
 
     const update = await request(app)
       .put(`/livros/${id}`)
@@ -77,7 +72,6 @@ describe('Livros API', () => {
   });
 
   it('paginates and filters', async () => {
-    await resetDb();
     const items = [
       { titulo: 'Domain-Driven Design', num_paginas: 560, isbn: '978-0321125217', editora: 'Addison-Wesley' },
       { titulo: 'Patterns of Enterprise Application Architecture', num_paginas: 533, isbn: '978-0321127426', editora: 'Addison-Wesley' },
@@ -94,7 +88,7 @@ describe('Livros API', () => {
     const page1 = await request(app).get('/livros?page=1&pageSize=2');
     expect(page1.status).toBe(200);
     expect(page1.body.data.length).toBe(2);
-    expect(page1.body.pagination.total).toBe(3);
+    expect(page1.body.pagination.total).toBe(4); // seeded book + 3 inserted
 
     const search = await request(app).get('/livros?q=Legacy');
     expect(search.status).toBe(200);

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import logo from '../../assets/logo.png';

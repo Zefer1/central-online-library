@@ -2,10 +2,15 @@ import axios from 'axios';
 
 import { getStoredToken } from '../auth/AuthContext';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const RUNTIME_API_URL =
+  typeof window !== 'undefined' && window.__APP_CONFIG__ && typeof window.__APP_CONFIG__.API_URL === 'string'
+    ? window.__APP_CONFIG__.API_URL
+    : '';
+
+const BASE_URL = RUNTIME_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const DEFAULT_TOKEN = import.meta.env.VITE_API_TOKEN || '';
 
-const client = axios.create({
+export const client = axios.create({
   baseURL: BASE_URL,
 });
 
@@ -45,6 +50,13 @@ export class LivrosService {
 
   static async deleteLivro(id) {
     const response = await client.delete(`/livros/${id}`);
+    return response.data;
+  }
+
+  static async generateAiSummary(id, { force = false } = {}) {
+    const response = await client.post(`/api/books/${id}/ai-summary`, null, {
+      params: { force },
+    });
     return response.data;
   }
 }
