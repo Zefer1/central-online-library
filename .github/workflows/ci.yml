@@ -40,10 +40,10 @@ jobs:
 
       - name: Wait for Postgres
         run: |
-          echo "Waiting for Postgres on localhost:5432..."
-          for i in {1..30}; do
-            if nc -z localhost 5432; then
-              echo "Postgres is reachable."
+          echo "Waiting for Postgres on 127.0.0.1:5432..."
+          for i in {1..60}; do
+            if (echo > /dev/tcp/127.0.0.1/5432) >/dev/null 2>&1; then
+              echo "Postgres port is reachable."
               exit 0
             fi
             sleep 1
@@ -55,7 +55,7 @@ jobs:
         env:
           # Keep tests deterministic in CI
           NODE_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/central_library
+          DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/central_library
           AUTO_CREATE_DB: "true"
           SEED: "false"
         run: npm test
