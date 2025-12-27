@@ -4,12 +4,14 @@ import Header from '../../components/Header/Header';
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { useAuth } from '../../auth/AuthContext';
 import { useToast } from '../../components/Toast/ToastProvider';
+import { useTranslation } from '../../i18n/useTranslation';
 import './index.scss';
 
 export default function Login() {
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('admin');
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const { login } = useAuth();
   const toast = useToast();
@@ -23,10 +25,10 @@ export default function Login() {
     setLoading(true);
     try {
       await login({ username, password });
-      toast.push({ type: 'success', message: 'Login efetuado' });
+      toast.push({ type: 'success', message: t('login.success') });
       navigate(from, { replace: true });
     } catch (err) {
-      const message = err?.response?.data?.error?.message || err.message || 'Erro no login';
+      const message = err?.response?.data?.error?.message || err.message || t('errors.login');
       toast.push({ type: 'error', message });
     } finally {
       setLoading(false);
@@ -37,17 +39,17 @@ export default function Login() {
     <>
       <Header />
       <div className="page login">
-        <PageTitle title="Login" subtitle="Entre para cadastrar e editar livros." />
+        <PageTitle title={t('login.title')} subtitle={t('login.subtitle')} />
         <form onSubmit={onSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">{t('login.username')}</label>
             <input id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('login.password')}</label>
             <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <button type="submit" disabled={loading}>{loading ? 'Entrando...' : 'Entrar'}</button>
+          <button type="submit" disabled={loading}>{loading ? t('login.signingIn') : t('login.signIn')}</button>
         </form>
       </div>
     </>

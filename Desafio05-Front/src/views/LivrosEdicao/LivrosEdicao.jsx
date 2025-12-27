@@ -5,6 +5,7 @@ import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros'
 import { LivrosService } from '../../api/LivrosService'
 import { BookForm } from '../../components/BookForm/BookForm'
 import { useToast } from '../../components/Toast/ToastProvider'
+import { useTranslation } from '../../i18n/useTranslation'
 import "./index.scss"
 
 const LivrosEdicao = () => {
@@ -14,6 +15,7 @@ const LivrosEdicao = () => {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const toast = useToast()
+  const { t } = useTranslation()
 
   useEffect(() => {
     (async () => {
@@ -23,7 +25,7 @@ const LivrosEdicao = () => {
         setLivro(data)
         setError('')
       } catch (err) {
-        const message = err?.response?.data?.error?.message || 'Erro ao carregar livro'
+        const message = err?.response?.data?.error?.message || t('errors.loadBook')
         setError(message)
         setLivro(null)
       } finally {
@@ -48,7 +50,7 @@ const LivrosEdicao = () => {
       <SubmenuLivros/>
       <div className='page livrosCadastro'>
         {loading ? (
-          <p>Carregando...</p>
+          <p>{t('common.loading')}</p>
         ) : error ? (
           <p className='error'>{error}</p>
         ) : (
@@ -56,7 +58,7 @@ const LivrosEdicao = () => {
             initialValue={livro}
             onSubmit={saveEdit}
             submitting={saving}
-            title={`Edição do Livro #${livro?.id}`}
+            title={t('bookForm.editTitle', { id: livro?.id })}
           />
         )}
       </div>

@@ -2,10 +2,12 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import logo from '../../assets/logo.png';
+import { useTranslation } from '../../i18n/useTranslation';
 import './index.scss';
 
 export default function Landing() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
+  const { t } = useTranslation();
 
   const scrollToFeatures = () => {
     const el = document.getElementById('features');
@@ -20,28 +22,27 @@ export default function Landing() {
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero__content">
             <p className="hero__badge">Central Online Library</p>
-            <h1 id="hero-title">Organize, pesquise e gerencie livros sem complicação</h1>
+            <h1 id="hero-title">{t('landing.heroTitle')}</h1>
             <p className="hero__subtitle">
-              Uma biblioteca online com autenticação, paginação, filtros e persistência em Postgres.
-              Pensada para ser rápida, simples e segura.
+              {t('landing.heroSubtitle')}
             </p>
 
-            <div className="hero__actions" aria-label="Ações principais">
-              <Link className="btn btn--primary" to="/login">Entrar</Link>
-              <Link className="btn btn--secondary" to="/livros">Ver catálogo</Link>
+            <div className="hero__actions" aria-label={t('landing.actionsLabel')}>
+              <Link className="btn btn--primary" to="/login">{t('landing.ctaSignIn')}</Link>
+              <Link className="btn btn--secondary" to="/livros">{t('landing.ctaSeeCatalog')}</Link>
               <button className="btn btn--ghost" type="button" onClick={scrollToFeatures}>
-                Saber mais
+                {t('landing.ctaLearnMore')}
               </button>
             </div>
 
-            <dl className="hero__stats" aria-label="Destaques">
+            <dl className="hero__stats" aria-label={t('landing.highlightsLabel')}>
               <div className="stat">
-                <dt>Busca</dt>
-                <dd>rápida</dd>
+                <dt>{t('landing.statSearch')}</dt>
+                <dd>{t('landing.statSearchValue')}</dd>
               </div>
               <div className="stat">
-                <dt>Paginação</dt>
-                <dd>nativa</dd>
+                <dt>{t('landing.statPagination')}</dt>
+                <dd>{t('landing.statPaginationValue')}</dd>
               </div>
               <div className="stat">
                 <dt>Auth</dt>
@@ -53,9 +54,9 @@ export default function Landing() {
           <div className="hero__visual" aria-hidden="true">
             <div className="hero__card">
               <img className="hero__logo" src={logo} alt="" />
-              <div className="hero__cardTitle">Seu catálogo em um só lugar</div>
+              <div className="hero__cardTitle">{t('landing.cardTitle')}</div>
               <div className="hero__cardText">
-                Cadastre livros com ISBN único, edite com segurança e encontre tudo com filtros.
+                {t('landing.cardText')}
               </div>
               <div className="hero__cardChips">
                 <span className="chip">Postgres</span>
@@ -68,88 +69,88 @@ export default function Landing() {
 
         <section className="features" id="features" aria-labelledby="features-title">
           <div className="sectionTitle">
-            <h2 id="features-title">Feito para o dia a dia</h2>
-            <p>O essencial para gerir uma biblioteca com fluidez.</p>
+            <h2 id="features-title">{t('landing.featuresTitle')}</h2>
+            <p>{t('landing.featuresSubtitle')}</p>
           </div>
 
           <div className="features__grid">
-            <article className="feature" aria-label="Pesquisa e filtros">
-              <h3>Pesquisa e filtros</h3>
-              <p>Filtre por editora/ISBN, pesquise por texto e ordene resultados.</p>
+            <article className="feature" aria-label={t('landing.featureSearchTitle')}>
+              <h3>{t('landing.featureSearchTitle')}</h3>
+              <p>{t('landing.featureSearchText')}</p>
             </article>
-            <article className="feature" aria-label="Paginação">
-              <h3>Paginação</h3>
-              <p>Mais performance e melhor UX com paginação e tamanhos de página.</p>
+            <article className="feature" aria-label={t('landing.featurePaginationTitle')}>
+              <h3>{t('landing.featurePaginationTitle')}</h3>
+              <p>{t('landing.featurePaginationText')}</p>
             </article>
-            <article className="feature" aria-label="Persistência">
-              <h3>Persistência</h3>
-              <p>Dados persistidos em Postgres, com bootstrap/seed no arranque.</p>
+            <article className="feature" aria-label={t('landing.featurePersistenceTitle')}>
+              <h3>{t('landing.featurePersistenceTitle')}</h3>
+              <p>{t('landing.featurePersistenceText')}</p>
             </article>
-            <article className="feature" aria-label="Validação e erros">
-              <h3>Validação e erros</h3>
-              <p>Validação no backend e respostas consistentes para falhas e sucesso.</p>
+            <article className="feature" aria-label={t('landing.featureValidationTitle')}>
+              <h3>{t('landing.featureValidationTitle')}</h3>
+              <p>{t('landing.featureValidationText')}</p>
             </article>
-            <article className="feature" aria-label="Autenticação">
-              <h3>Autenticação</h3>
-              <p>Login com JWT e rotas protegidas para criação e edição de livros.</p>
+            <article className="feature" aria-label={t('landing.featureAuthTitle')}>
+              <h3>{t('landing.featureAuthTitle')}</h3>
+              <p>{t('landing.featureAuthText')}</p>
             </article>
             <article className="feature" aria-label="Toasts">
-              <h3>Feedback instantâneo</h3>
-              <p>Toasts para sucesso/erro, mantendo o utilizador informado.</p>
+              <h3>{t('landing.featureToastsTitle')}</h3>
+              <p>{t('landing.featureToastsText')}</p>
             </article>
           </div>
         </section>
 
         <section className="how" aria-labelledby="how-title">
           <div className="sectionTitle">
-            <h2 id="how-title">Como funciona</h2>
-            <p>Em três passos rápidos.</p>
+            <h2 id="how-title">{t('landing.howTitle')}</h2>
+            <p>{t('landing.howSubtitle')}</p>
           </div>
 
           <ol className="how__steps">
             <li>
-              <strong>Entre</strong>
-              <span>Use a página de login para obter o token.</span>
+              <strong>{t('landing.howStep1Title')}</strong>
+              <span>{t('landing.howStep1Text')}</span>
             </li>
             <li>
-              <strong>Explore</strong>
-              <span>Veja o catálogo e use busca, filtros e ordenação.</span>
+              <strong>{t('landing.howStep2Title')}</strong>
+              <span>{t('landing.howStep2Text')}</span>
             </li>
             <li>
-              <strong>Gerencie</strong>
-              <span>Cadastre e edite livros (rotas protegidas).</span>
+              <strong>{t('landing.howStep3Title')}</strong>
+              <span>{t('landing.howStep3Text')}</span>
             </li>
           </ol>
 
           <div className="how__cta">
-            <Link className="btn btn--primary" to="/livros/cadastro">Cadastrar um livro</Link>
-            <Link className="btn btn--secondary" to="/livros">Abrir catálogo</Link>
+            <Link className="btn btn--primary" to="/livros/cadastro">{t('landing.howCtaRegister')}</Link>
+            <Link className="btn btn--secondary" to="/livros">{t('landing.howCtaOpenCatalog')}</Link>
           </div>
         </section>
 
-        <section className="finalCta" aria-label="Chamada final">
+        <section className="finalCta" aria-label={t('landing.finalAria')}>
           <div className="finalCta__box">
-            <h2>Pronto para começar?</h2>
-            <p>Faça login e comece a gerir sua biblioteca agora.</p>
+            <h2>{t('landing.finalTitle')}</h2>
+            <p>{t('landing.finalSubtitle')}</p>
             <div className="finalCta__actions">
-              <Link className="btn btn--primary" to="/login">Entrar</Link>
-              <Link className="btn btn--ghost" to="/livros">Ver livros</Link>
+              <Link className="btn btn--primary" to="/login">{t('landing.finalCtaSignIn')}</Link>
+              <Link className="btn btn--ghost" to="/livros">{t('landing.finalCtaSeeBooks')}</Link>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="footer" aria-label="Rodapé">
+      <footer className="footer" aria-label={t('landing.footerLabel')}>
         <div className="footer__inner">
           <div className="footer__brand">
-            <img src={logo} alt="Biblioteca Central Online" />
+            <img src={logo} alt={t('landing.footerLogoAlt')} />
             <span>Central Online Library</span>
           </div>
 
-          <nav className="footer__links" aria-label="Links">
-            <a href="#features" onClick={(e) => { e.preventDefault(); scrollToFeatures(); }}>Features</a>
-            <Link to="/livros">Livros</Link>
-            <Link to="/login">Login</Link>
+          <nav className="footer__links" aria-label={t('landing.footerLinksLabel')}>
+            <a href="#features" onClick={(e) => { e.preventDefault(); scrollToFeatures(); }}>{t('landing.footerFeatures')}</a>
+            <Link to="/livros">{t('nav.books')}</Link>
+            <Link to="/login">{t('nav.login')}</Link>
           </nav>
 
           <div className="footer__copy">© {currentYear} Central Online Library</div>
