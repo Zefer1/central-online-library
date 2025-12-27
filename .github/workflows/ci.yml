@@ -15,7 +15,9 @@ jobs:
     env:
       # Keep tests deterministic in CI
       NODE_ENV: test
-      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:5432/central_library
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:${{ job.services.postgres.ports[5432] }}/central_library
       AUTO_CREATE_DB: "true"
       SEED: "false"
     services:
@@ -26,7 +28,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: central_library
         ports:
-          - 5432:5432
+          - 5432/tcp
         options: >-
           --health-cmd="pg_isready -U postgres -d central_library"
           --health-interval=10s
@@ -53,6 +55,8 @@ jobs:
         run: |
           echo "NODE_ENV=$NODE_ENV"
           echo "DATABASE_URL=$DATABASE_URL"
+          echo "POSTGRES_HOST=$POSTGRES_HOST"
+          echo "POSTGRES_PORT=$POSTGRES_PORT"
           echo "AUTO_CREATE_DB=$AUTO_CREATE_DB"
           echo "SEED=$SEED"
 
@@ -67,16 +71,21 @@ jobs:
           echo "Docker containers (including services):"
           docker ps -a || true
 
-          echo "Waiting for Postgres on 127.0.0.1:5432 (host port mapping)..."
+          if [ -z "${POSTGRES_PORT:-}" ]; then
+            echo "POSTGRES_PORT is empty; cannot wait for Postgres." >&2
+            exit 1
+          fi
+
+          echo "Waiting for Postgres on ${POSTGRES_HOST}:${POSTGRES_PORT} (service port mapping)..."
           for i in {1..120}; do
-            if pg_isready -h 127.0.0.1 -p 5432 -U postgres -d central_library; then
+            if pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U postgres -d central_library; then
               echo "Postgres is ready."
               break
             fi
             sleep 1
           done
 
-          if ! pg_isready -h 127.0.0.1 -p 5432 -U postgres -d central_library; then
+          if ! pg_isready -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U postgres -d central_library; then
             echo "Postgres did not become ready in time." >&2
             echo "Docker containers:" >&2
             docker ps -a >&2 || true
@@ -92,7 +101,7 @@ jobs:
           fi
 
           echo "Postgres is ready; checking with psql..."
-          psql -h 127.0.0.1 -p 5432 -U postgres -d central_library -c "SELECT 1;"
+          psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U postgres -d central_library -c "SELECT 1;"
 
       - name: Debug docker services
         if: always()
