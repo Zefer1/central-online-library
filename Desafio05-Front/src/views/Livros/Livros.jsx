@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../../components/Header/Header'
 import SubmenuLivros from '../../components/SubmenuLivros/SubmenuLivros'
@@ -36,7 +36,12 @@ const Livros = () => {
   const [error, setError] = useState('')
   const toast = useToast()
 
-  async function getLivros(currentPage = page, currentQ = q, currentSort = sort, currentOrder = order, currentPageSize = pageSize) {
+  const qRef = useRef(q)
+  useEffect(() => {
+    qRef.current = q
+  }, [q])
+
+  const getLivros = useCallback(async (currentPage = page, currentQ = q, currentSort = sort, currentOrder = order, currentPageSize = pageSize) => {
     try {
       setLoading(true)
       setError('')
@@ -57,9 +62,9 @@ const Livros = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [order, page, pageSize, q, sort, t])
 
-  async function deleteLivro(id) {
+  const deleteLivro = useCallback(async (id) => {
     if (confirm(t('books.deleteConfirm', { id }))) {
       try {
         const { message } = await LivrosService.deleteLivro(id)
@@ -70,11 +75,11 @@ const Livros = () => {
         toast.push({ type: 'error', message })
       }
     }
-  }
+  }, [getLivros, t, toast])
 
   useEffect(() => {
     getLivros()
-  }, [])
+  }, [getLivros])
 
   useEffect(() => {
     const nextPageSize = settings.pageSize
@@ -82,8 +87,9 @@ const Livros = () => {
     setPageSize(nextPageSize)
     setSort(next.sort)
     setOrder(next.order)
-    getLivros(1, q, next.sort, next.order, nextPageSize)
-  }, [settings.pageSize, settings.defaultSort])
+    // Keep the current query without re-running on every keystroke.
+    getLivros(1, qRef.current, next.sort, next.order, nextPageSize)
+  }, [getLivros, settings.defaultSort, settings.pageSize])
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -186,6 +192,9 @@ const Livros = () => {
                       <small>{t('books.isbnLine', { isbn: l.isbn, pages: l.num_paginas })}</small>
                     </div>
                     <div className='botoes'>
+                      <Link className='btn details' to={`/livros/detalhe/${l.id}`} aria-label={t('books.details')}>
+                        {t('books.details')}
+                      </Link>
                       <Link className='btn edit' to={`/livros/edicao/${l.id}`}>✎</Link>
                       <button className='btn delete' type="button" onClick={()=>deleteLivro(l.id)}>🗑️</button>
                     </div>

@@ -1,10 +1,16 @@
 import pg from 'pg';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const { Pool } = pg;
 
 const {
   DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/central_library',
 } = process.env;
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const migrationsDir = path.join(__dirname, 'db', 'migrations');
 
 export const pool = new Pool({ connectionString: DATABASE_URL });
 
@@ -24,6 +30,7 @@ export async function ensureDatabase() {
 
     // Enforce unique ISBN (scalable lookup + prevents duplicates)
     await pool.query('CREATE UNIQUE INDEX IF NOT EXISTS livros_isbn_unique ON livros (isbn)');
+    await runMigrations();
   } catch (err) {
     // If database does not exist, optionally try creating it by connecting to the default 'postgres' DB
     const missingDb = err?.code === '3D000' || /does not exist/i.test(err?.message || '');
@@ -60,6 +67,7 @@ export async function ensureDatabase() {
           );
         `);
         await pool.query('CREATE UNIQUE INDEX IF NOT EXISTS livros_isbn_unique ON livros (isbn)');
+        await runMigrations();
         return;
       } catch (innerErr) {
         console.error('Failed to create database automatically:', innerErr);
@@ -67,6 +75,50 @@ export async function ensureDatabase() {
       }
     }
     throw err;
+  }
+}
+
+async function runMigrations() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS migrations (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL UNIQUE,
+      run_on TIMESTAMP WITH TIME ZONE DEFAULT now()
+    );
+  `);
+
+  let files = [];
+  try {
+    files = await fs.readdir(migrationsDir);
+  } catch (err) {
+    if (err?.code === 'ENOENT') return; // no migrations folder yet
+    throw err;
+  }
+
+  const sqlFiles = files.filter((f) => f.endsWith('.sql')).sort();
+  if (!sqlFiles.length) return;
+
+  const { rows } = await pool.query('SELECT name FROM migrations');
+  const applied = new Set(rows.map((r) => r.name));
+
+  for (const file of sqlFiles) {
+    if (applied.has(file)) continue;
+    const fullPath = path.join(migrationsDir, file);
+    const sql = await fs.readFile(fullPath, 'utf8');
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query(sql);
+      await client.query('INSERT INTO migrations (name) VALUES ($1)', [file]);
+      await client.query('COMMIT');
+      console.log(`Migration applied: ${file}`);
+    } catch (migrationErr) {
+      await client.query('ROLLBACK');
+      console.error(`Migration failed: ${file}`, migrationErr);
+      throw migrationErr;
+    } finally {
+      client.release();
+    }
   }
 }
 

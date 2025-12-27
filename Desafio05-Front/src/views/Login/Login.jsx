@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { useAuth } from '../../auth/AuthContext';
@@ -50,6 +50,11 @@ export default function Login() {
             <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <button type="submit" disabled={loading}>{loading ? t('login.signingIn') : t('login.signIn')}</button>
+
+          <p className="login__footer">
+            {t('login.noAccount')}{' '}
+            <Link to="/register">{t('login.signUpLink')}</Link>
+          </p>
         </form>
       </div>
     </>

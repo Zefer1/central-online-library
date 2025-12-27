@@ -21,14 +21,23 @@ export function AuthProvider({ children }) {
     return nextToken;
   }, []);
 
+  const register = useCallback(async ({ username, password }) => {
+    const res = await axios.post(`${BASE_URL}/auth/register`, { username, password });
+    const nextToken = res?.data?.data?.token;
+    if (!nextToken) throw new Error('Token não recebido');
+    localStorage.setItem(STORAGE_KEY, nextToken);
+    setToken(nextToken);
+    return nextToken;
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
     setToken(DEFAULT_TOKEN || '');
   }, []);
 
   const value = useMemo(
-    () => ({ token, isAuthenticated, login, logout }),
-    [token, isAuthenticated, login, logout]
+    () => ({ token, isAuthenticated, login, register, logout }),
+    [token, isAuthenticated, login, register, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

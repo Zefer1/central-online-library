@@ -1,4 +1,3 @@
-import React from 'react';
 import Header from "../../components/Header/Header";
 import { PageTitle } from '../../components/PageTitle/PageTitle';
 import { useTranslation } from '../../i18n/useTranslation';

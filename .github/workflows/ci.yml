@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  api:
+    name: API (tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: desafio05-api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: desafio05-api/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        env:
+          # Keep tests deterministic in CI
+          NODE_ENV: test
+        run: npm test
+
+  front:
+    name: Frontend (lint/test/build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Desafio05-Front
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: Desafio05-Front/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build

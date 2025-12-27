@@ -32,7 +32,7 @@ const LivrosEdicao = () => {
         setLoading(false)
       }
     })()
-  }, [livroId])
+  }, [livroId, t])
 
   const saveEdit = async (body) => {
     setSaving(true)

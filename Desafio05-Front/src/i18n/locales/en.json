@@ -5,6 +5,7 @@
     "mainNavLabel": "Main navigation",
     "books": "Books",
     "settings": "Settings",
+    "register": "Register",
     "login": "Login",
     "logout": "Logout"
   },
@@ -54,7 +55,21 @@
     "password": "Password",
     "signingIn": "Signing in...",
     "signIn": "Sign in",
-    "success": "Logged in"
+    "success": "Logged in",
+    "noAccount": "No account yet?",
+    "signUpLink": "Register"
+  },
+  "register": {
+    "title": "Register",
+    "subtitle": "Create an account to get started.",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "signingUp": "Registering...",
+    "signUp": "Register",
+    "success": "Registered",
+    "haveAccount": "Already have an account?",
+    "signInLink": "Sign in"
   },
   "home": {
     "title": "Central Online Library",
@@ -131,14 +146,61 @@
     "next": "Next",
     "pageOf": "Page {page} of {total}",
     "isbnLine": "ISBN: {isbn} • {pages} pages",
-    "deleteConfirm": "Do you really want to remove the book with ID: {id}?"
+    "deleteConfirm": "Do you really want to remove the book with ID: {id}?",
+    "details": "Details",
+    "backToList": "Back to list",
+    "edit": "Edit book"
+  },
+  "bookDetail": {
+    "publisher": "Publisher: {editora}",
+    "pages": "Pages: {pages}",
+    "id": "Book code: {id}",
+    "aiSummaryTitle": "Quick summary (AI-generated)",
+    "aiSummaryHelper": "Auto-generated summary for quick context; it may be generic or imprecise.",
+    "aiSummaryUnavailable": "Summary not available yet.",
+    "aiSummaryGenerate": "Generate AI Summary",
+    "aiSummaryRegenerate": "Regenerate",
+    "aiSummaryLoading": "Generating summary...",
+    "aiSummaryError": "Could not generate summary"
   },
   "errors": {
     "login": "Login failed",
+    "register": "Registration failed",
+    "registrationDisabled": "Registration is disabled",
+    "passwordMismatch": "Passwords do not match",
     "saveBook": "Failed to save book",
     "loadBooks": "Failed to load books",
     "deleteBook": "Failed to delete book",
     "loadBook": "Failed to load book",
     "tokenNotReceived": "Token not received"
+  },
+  "ratings": {
+    "sectionLabel": "Book ratings",
+    "summaryLabel": "Community rating",
+    "averageLabel": "Average rating {value}",
+    "totalOne": "1 rating",
+    "totalMany": "{count} ratings",
+    "selected": "Selected: {value} star{suffix}",
+    "action": "Rate this book",
+    "histogramLabel": "Ratings histogram",
+    "count": "{score} stars: {count}",
+    "modalTitle": "Your rating",
+    "hint": "Share a quick comment (optional). Reviews flagged are held for moderation.",
+    "selectorLabel": "Select a score",
+    "star": "{value} star",
+    "reviewLabel": "Review",
+    "reviewPlaceholder": "Tell us what stood out for you...",
+    "anonymousWarning": "Anonymous ratings rely on your browser fingerprint and can be removed via cookie/fingerprint reset.",
+    "cancel": "Cancel",
+    "submit": "Submit rating",
+    "submitting": "Submitting...",
+    "close": "Close",
+    "loading": "Loading ratings...",
+    "success": "Rating submitted!",
+    "errors": {
+      "load": "Failed to load ratings",
+      "submit": "Could not submit rating",
+      "missingRating": "Select a star rating first"
+    }
   }
 }

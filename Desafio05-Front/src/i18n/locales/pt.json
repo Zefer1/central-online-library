@@ -5,6 +5,7 @@
     "mainNavLabel": "Navegação principal",
     "books": "Livros",
     "settings": "Definições",
+    "register": "Registar",
     "login": "Login",
     "logout": "Logout"
   },
@@ -54,7 +55,21 @@
     "password": "Password",
     "signingIn": "Entrando...",
     "signIn": "Entrar",
-    "success": "Login efetuado"
+    "success": "Login efetuado",
+    "noAccount": "Ainda não tem conta?",
+    "signUpLink": "Registar"
+  },
+  "register": {
+    "title": "Registo",
+    "subtitle": "Crie uma conta para começar.",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirmar password",
+    "signingUp": "A registar...",
+    "signUp": "Registar",
+    "success": "Registo efetuado",
+    "haveAccount": "Já tem conta?",
+    "signInLink": "Entrar"
   },
   "home": {
     "title": "Biblioteca Central Online",
@@ -131,14 +146,61 @@
     "next": "Próxima",
     "pageOf": "Página {page} de {total}",
     "isbnLine": "ISBN: {isbn} • {pages} páginas",
-    "deleteConfirm": "Você realmente deseja remover o livro de ID: {id}?"
+    "deleteConfirm": "Você realmente deseja remover o livro de ID: {id}?",
+    "details": "Detalhes",
+    "backToList": "Voltar para lista",
+    "edit": "Editar livro"
+  },
+  "bookDetail": {
+    "publisher": "Editora: {editora}",
+    "pages": "Páginas: {pages}",
+    "id": "Código do livro: {id}",
+    "aiSummaryTitle": "Resumo rápido (gerado por IA)",
+    "aiSummaryHelper": "Resumo automático para dar contexto rápido; pode ser genérico ou impreciso.",
+    "aiSummaryUnavailable": "Resumo ainda não disponível.",
+    "aiSummaryGenerate": "Gerar resumo por IA",
+    "aiSummaryRegenerate": "Regenerar",
+    "aiSummaryLoading": "Gerando resumo...",
+    "aiSummaryError": "Não foi possível gerar o resumo"
   },
   "errors": {
     "login": "Erro no login",
+    "register": "Erro no registo",
+    "registrationDisabled": "O registo está desativado",
+    "passwordMismatch": "As passwords não coincidem",
     "saveBook": "Erro ao salvar livro",
     "loadBooks": "Erro ao carregar livros",
     "deleteBook": "Erro ao deletar livro",
     "loadBook": "Erro ao carregar livro",
     "tokenNotReceived": "Token não recebido"
+  },
+  "ratings": {
+    "sectionLabel": "Avaliações do livro",
+    "summaryLabel": "Nota da comunidade",
+    "averageLabel": "Nota média {value}",
+    "totalOne": "1 avaliação",
+    "totalMany": "{count} avaliações",
+    "selected": "Selecionado: {value} estrela{suffix}",
+    "action": "Avaliar este livro",
+    "histogramLabel": "Histograma de notas",
+    "count": "{score} estrelas: {count}",
+    "modalTitle": "Sua avaliação",
+    "hint": "Partilhe um comentário rápido (opcional). Reviews sinalizadas ficam em moderação.",
+    "selectorLabel": "Selecione uma nota",
+    "star": "{value} estrela",
+    "reviewLabel": "Review",
+    "reviewPlaceholder": "Conte o que mais chamou atenção...",
+    "anonymousWarning": "Avaliações anónimas dependem da fingerprint do navegador e só podem ser removidas com esse identificador.",
+    "cancel": "Cancelar",
+    "submit": "Enviar avaliação",
+    "submitting": "Enviando...",
+    "close": "Fechar",
+    "loading": "Carregando avaliações...",
+    "success": "Avaliação enviada!",
+    "errors": {
+      "load": "Erro ao carregar avaliações",
+      "submit": "Não foi possível enviar a avaliação",
+      "missingRating": "Escolha uma nota primeiro"
+    }
   }
 }

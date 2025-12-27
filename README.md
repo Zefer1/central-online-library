@@ -14,19 +14,21 @@ A comprehensive library management system built with modern web technologies, pr
 -  Edit existing book details
 -  Delete books with confirmation
 -  Clean, modern UI with hover effects
+-  On-demand AI summaries (3–5 sentences) cached per book
 
 ##  Local Development
 
 ### Frontend
 - cd Desafio05-Front
 - npm install
+- copy .env.example to .env and adjust `VITE_API_URL` if needed
 - npm run dev
 
 ##  Backend
 
 - cd desafio05-api
 - npm install  
-- copy .env.example to .env and adjust DATABASE_URL/AUTH_TOKEN/CORS_ORIGIN if needed
+- copy .env.example to .env and adjust `DATABASE_URL`/`AUTH_TOKEN`/`CORS_ORIGIN` if needed
 - npm run dev
 
 ### Backend details
@@ -40,6 +42,7 @@ A comprehensive library management system built with modern web technologies, pr
 	- `GET /auth/me`
 	- `GET /livros` supports `page`, `pageSize`, `q`, `sort`, `order`, `isbn`, `editora`
 	- `POST/PUT/DELETE /livros` require Bearer auth
+	- `POST /api/books/:id/ai-summary` generates and stores a short AI summary (Bearer auth required)
 
 ### Frontend details
 - Configure API url/token via `.env` (`VITE_API_URL`, optional `VITE_API_TOKEN`).
@@ -59,19 +62,63 @@ The backend fails fast in `NODE_ENV=production` if insecure defaults are used.
 - Required: set `CORS_ORIGIN` to an allowlist (not `*`)
 - Required: keep `AUTO_CREATE_DB=false`
 
+## Production (Docker)
+
+For a concise portfolio-focused deployment walkthrough, see `DEPLOYMENT.md`.
+
+This repo includes a production compose file that builds and runs:
+- Postgres
+- API
+- Frontend (Nginx serving the Vite build)
+
+The API **fails fast** in `NODE_ENV=production` if insecure defaults are used.
+
+1) Create a production env file:
+
+```powershell
+Copy-Item .env.prod.example .env.prod
+```
+
+2) Edit `.env.prod` and set strong values for:
+- `POSTGRES_PASSWORD`
+- `AUTH_USERNAME`, `AUTH_PASSWORD`
+- `JWT_SECRET`
+- `CORS_ORIGIN` (your frontend origin)
+- `WEB_API_URL` (your API base URL)
+
+3) Build and run:
+
+```powershell
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+- Frontend: http://localhost:8080
+- API: http://localhost:3001 (healthcheck: `/health`)
+
+### AI usage
+
+- AI is only used on-demand (non-realtime) to generate a short summary for a book, and the result is cached in the database (`ai_summary`, `ai_summary_updated_at`).
+- The summary is a contextual aid for quick understanding; it may be generic or imprecise.
+- In tests the AI call is mocked; in production it uses OpenAI if `OPENAI_API_KEY` is set, otherwise a deterministic fallback summary is stored.
+- Endpoint: `POST /api/books/:id/ai-summary` (set `force=true` to regenerate). The frontend displays the cached summary.
+
 ### Docker (dev / CI)
 
 A small `docker-compose.yml` is included to run a Postgres instance for local development or CI.
 
-- Copy the example env and start the DB:
+- Start the DB (defaults work out-of-the-box):
 
 ```powershell
-copy .env.dev.example .env.dev
-# edit .env.dev if needed
 docker compose up -d
 ```
 
-- The compose file exposes Postgres on port `5432`. The example `.env.dev` sets `DATABASE_URL` to `postgres://postgres:postgres@localhost:5432/central_library` and `AUTO_CREATE_DB=true` so the backend can initialize the DB when running tests.
+- Optionally, you can pass explicit values via an env file:
+
+```powershell
+docker compose --env-file .env.dev.example up -d
+```
+
+- The compose file exposes Postgres on port `5432`. The provided `.env.dev.example` contains a suggested `DATABASE_URL` and `AUTO_CREATE_DB=true` for local development/tests.
 
 - To run backend tests against the docker DB:
 
@@ -85,5 +132,20 @@ Stop and remove containers when done:
 
 ```powershell
 docker compose down -v
+```
+
+## Verification
+
+Run a full local verification pass (API tests + frontend lint/tests/build):
+
+```powershell
+./scripts/verify.ps1
+```
+
+If dependencies are already installed, you can skip `npm ci`:
+
+```powershell
+$env:SKIP_INSTALL=1
+./scripts/verify.ps1
 ```
 
