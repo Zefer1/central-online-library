@@ -5,14 +5,18 @@ import { fileURLToPath } from 'url';
 
 const { Pool } = pg;
 
-const {
-  DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/central_library',
-} = process.env;
+const { DATABASE_URL } = process.env;
+if (!DATABASE_URL && process.env.CI) {
+  throw new Error('DATABASE_URL must be set in CI (GitHub Actions)');
+}
+
+const connectionString =
+  DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/central_library';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const migrationsDir = path.join(__dirname, 'db', 'migrations');
 
-export const pool = new Pool({ connectionString: DATABASE_URL });
+export const pool = new Pool({ connectionString });
 
 export async function ensureDatabase() {
   try {

@@ -12,6 +12,12 @@ jobs:
     defaults:
       run:
         working-directory: desafio05-api
+    env:
+      # Keep tests deterministic in CI
+      NODE_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/central_library
+      AUTO_CREATE_DB: "true"
+      SEED: "false"
     services:
       postgres:
         image: postgres:15
@@ -41,6 +47,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
+      - name: Debug env
+        run: |
+          echo "NODE_ENV=$NODE_ENV"
+          echo "DATABASE_URL=$DATABASE_URL"
+          echo "AUTO_CREATE_DB=$AUTO_CREATE_DB"
+          echo "SEED=$SEED"
+
       - name: Wait for Postgres
         env:
           PGPASSWORD: postgres
@@ -54,13 +67,12 @@ jobs:
           echo "Postgres is ready; checking with psql..."
           psql -h postgres -p 5432 -U postgres -d central_library -c "SELECT 1;"
 
+      - name: Debug docker services
+        run: |
+          docker ps -a
+          docker images | head -n 20
+
       - name: Test
-        env:
-          # Keep tests deterministic in CI
-          NODE_ENV: test
-          DATABASE_URL: postgres://postgres:postgres@postgres:5432/central_library
-          AUTO_CREATE_DB: "true"
-          SEED: "false"
         run: npm test
 
   front:
