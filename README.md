@@ -58,9 +58,11 @@ Notes:
 
 The backend fails fast in `NODE_ENV=production` if insecure defaults are used.
 
-- Required: set strong `JWT_SECRET`, change `AUTH_USERNAME`/`AUTH_PASSWORD`
+- Required: set `DATABASE_URL` (managed Postgres connection string)
+- Required: set strong `JWT_SECRET`, set `AUTH_USERNAME`/`AUTH_PASSWORD`
 - Required: set `CORS_ORIGIN` to an allowlist (not `*`)
 - Required: keep `AUTO_CREATE_DB=false`
+- Recommended: keep seeding disabled (only enable when `SEED=true`)
 
 ## Production (Docker)
 
@@ -81,6 +83,7 @@ Copy-Item .env.prod.example .env.prod
 
 2) Edit `.env.prod` and set strong values for:
 - `POSTGRES_PASSWORD`
+- `DATABASE_URL`
 - `AUTH_USERNAME`, `AUTH_PASSWORD`
 - `JWT_SECRET`
 - `CORS_ORIGIN` (your frontend origin)
@@ -119,6 +122,10 @@ docker compose --env-file .env.dev.example up -d
 ```
 
 - The compose file exposes Postgres on port `5432`. The provided `.env.dev.example` contains a suggested `DATABASE_URL` and `AUTO_CREATE_DB=true` for local development/tests.
+
+## Deploy (Railway)
+
+For a portfolio-friendly production setup on Railway (API + managed Postgres, optional frontend), see `DEPLOYMENT.md`.
 
 - To run backend tests against the docker DB:
 

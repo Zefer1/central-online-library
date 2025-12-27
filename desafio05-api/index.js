@@ -522,12 +522,14 @@ app.use((err, req, res, _next) => {
   if (err?.code === '23505') {
     return res.status(409).json({ error: { message: 'Já existe um livro com esses dados (ex.: ISBN duplicado)' } });
   }
-  return res.status(500).json({ error: { message: err?.message || 'Erro interno do servidor' } });
+  const isProd = (process.env.NODE_ENV || '').toLowerCase() === 'production';
+  const message = isProd ? 'Erro interno do servidor' : (err?.message || 'Erro interno do servidor');
+  return res.status(500).json({ error: { message } });
 });
 
 export const ready = (async () => {
   await ensureDatabase();
-  if (process.env.SEED !== 'false') {
+  if ((process.env.SEED || '').toLowerCase() === 'true') {
     await seedIfEmpty();
   }
 })();

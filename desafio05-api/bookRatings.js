@@ -14,17 +14,17 @@ const ratingSchema = z.object({
   ip_fingerprint: z.string().trim().max(255).optional(),
 });
 
-const isTest = (process.env.NODE_ENV || '').toLowerCase() === 'test';
+const nodeEnv = (process.env.NODE_ENV || '').toLowerCase();
+const isTest = nodeEnv === 'test';
+const isProd = nodeEnv === 'production';
 const rateWindowMs = 60_000;
 const rateLimitPerIp = isTest ? 1000 : 5;
 const guestCooldownMs = 24 * 60 * 60 * 1000; // 24h
 const summaryTtlSeconds = 30;
 
-const {
-  AUTH_TOKEN = 'dev-token',
-  AUTH_USERNAME = 'admin',
-  JWT_SECRET = '',
-} = process.env;
+const AUTH_TOKEN = process.env.AUTH_TOKEN || (isProd ? '' : 'dev-token');
+const AUTH_USERNAME = process.env.AUTH_USERNAME || 'admin';
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 function sendError(res, status, message) {
   return res.status(status).json({ error: { message } });
@@ -381,7 +381,7 @@ router.use((err, req, res, next) => {
     return sendError(res, err.status, err.message || 'Erro ao processar avaliação');
   }
   console.error(err);
-  return sendError(res, 500, err?.message || 'Erro interno do servidor');
+  return sendError(res, 500, isProd ? 'Erro interno do servidor' : (err?.message || 'Erro interno do servidor'));
 });
 
 export const ratingsRouter = router;
