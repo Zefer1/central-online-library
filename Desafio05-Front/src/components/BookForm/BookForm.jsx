@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from '../../i18n/useTranslation';
 import './index.scss';
 
 const emptyBook = { titulo: '', num_paginas: '', isbn: '', editora: '' };
@@ -6,6 +7,7 @@ const emptyBook = { titulo: '', num_paginas: '', isbn: '', editora: '' };
 export function BookForm({ initialValue = emptyBook, onSubmit, submitting = false, title }) {
   const [livro, setLivro] = useState(initialValue);
   const [error, setError] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLivro(initialValue || emptyBook);
@@ -24,7 +26,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
         num_paginas: Number(livro.num_paginas),
       });
     } catch (err) {
-      const message = err?.response?.data?.error?.message || err.message || 'Erro ao salvar livro';
+      const message = err?.response?.data?.error?.message || err.message || t('errors.saveBook');
       setError(message);
     }
   };
@@ -34,7 +36,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
       {title && <h1>{title}</h1>}
       <form onSubmit={handleSubmit}>
         <div className='form-group'>
-          <label htmlFor="titulo">Título</label>
+          <label htmlFor="titulo">{t('bookForm.title')}</label>
           <input
             id="titulo"
             type="text"
@@ -44,7 +46,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
           />
         </div>
         <div className='form-group'>
-          <label htmlFor="num_paginas">Número de Páginas</label>
+          <label htmlFor="num_paginas">{t('bookForm.pages')}</label>
           <input
             id="num_paginas"
             type="number"
@@ -55,7 +57,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
           />
         </div>
         <div className='form-group'>
-          <label htmlFor="isbn">ISBN</label>
+          <label htmlFor="isbn">{t('bookForm.isbn')}</label>
           <input
             id="isbn"
             type="text"
@@ -65,7 +67,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
           />
         </div>
         <div className='form-group'>
-          <label htmlFor="editora">Editora</label>
+          <label htmlFor="editora">{t('bookForm.publisher')}</label>
           <input
             id="editora"
             type="text"
@@ -76,7 +78,7 @@ export function BookForm({ initialValue = emptyBook, onSubmit, submitting = fals
         </div>
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Salvando...' : 'Salvar Livro'}
+          {submitting ? t('bookForm.saving') : t('bookForm.save')}
         </button>
       </form>
     </div>

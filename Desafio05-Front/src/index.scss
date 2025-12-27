@@ -17,6 +17,11 @@
   --radius-lg: 20px;
 
   --container: 1120px;
+
+  --control-bg: rgba(0, 0, 0, 0.18);
+  --control-border: rgba(255, 255, 255, 0.16);
+  --control-placeholder: rgba(233, 238, 252, 0.55);
+  --control-option-bg: #0b1020;
 }
 
 html[data-theme='light'] {
@@ -29,6 +34,11 @@ html[data-theme='light'] {
   --muted: rgba(11, 16, 32, 0.65);
   --shadow: 0 18px 50px rgba(11, 16, 32, 0.12);
   --shadow-soft: 0 10px 26px rgba(11, 16, 32, 0.10);
+
+  --control-bg: rgba(255, 255, 255, 0.85);
+  --control-border: rgba(10, 16, 32, 0.14);
+  --control-placeholder: rgba(11, 16, 32, 0.45);
+  --control-option-bg: #ffffff;
 }
 
 html[data-reduced-motion='true'] * {
@@ -144,6 +154,26 @@ img {
   color: var(--text);
 }
 
+html[data-theme='light'] .btn--secondary {
+  background: rgba(11, 16, 32, 0.06);
+  border-color: rgba(11, 16, 32, 0.14);
+  color: var(--text);
+}
+
+html[data-theme='light'] .btn--secondary:hover {
+  background: rgba(11, 16, 32, 0.08);
+  border-color: rgba(11, 16, 32, 0.22);
+}
+
+html[data-theme='light'] .btn--ghost {
+  border-color: rgba(11, 16, 32, 0.18);
+  color: var(--text);
+}
+
+html[data-theme='light'] .btn--ghost:hover {
+  border-color: rgba(11, 16, 32, 0.28);
+}
+
 input,
 select,
 textarea {
@@ -167,13 +197,18 @@ textarea {
   width: 100%;
   padding: 10px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
   outline: none;
 }
 
 .input::placeholder {
-  color: rgba(233, 238, 252, 0.55);
+  color: var(--control-placeholder);
+}
+
+select option {
+  background-color: var(--control-option-bg);
+  color: var(--text);
 }
 
 .input:focus,

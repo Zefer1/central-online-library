@@ -10,6 +10,7 @@ describe('Settings view', () => {
     localStorage.clear()
     document.documentElement.removeAttribute('data-theme')
     document.documentElement.removeAttribute('data-reduced-motion')
+    document.documentElement.removeAttribute('lang')
   })
 
   it('persists theme to localStorage and applies data-theme', () => {
@@ -45,5 +46,27 @@ describe('Settings view', () => {
     fireEvent.change(pageSize, { target: { value: '20' } })
 
     expect(localStorage.getItem('col_settings_v1')).toContain('"pageSize":20')
+  })
+
+  it('switches language to EN and applies html lang', async () => {
+    render(
+      <MemoryRouter>
+        <AuthProvider>
+          <SettingsProvider>
+            <Settings />
+          </SettingsProvider>
+        </AuthProvider>
+      </MemoryRouter>
+    )
+
+    const language = screen.getByLabelText('Idioma')
+    fireEvent.change(language, { target: { value: 'en' } })
+
+    expect(document.documentElement.getAttribute('lang')).toBe('en')
+    expect(localStorage.getItem('col_settings_v1')).toContain('"language":"en"')
+
+    // UI should re-render with translated labels
+    expect(await screen.findByLabelText('Theme')).toBeInTheDocument()
+    expect(screen.getByText('Settings')).toBeInTheDocument()
   })
 })
