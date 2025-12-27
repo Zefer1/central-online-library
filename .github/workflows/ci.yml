@@ -16,8 +16,6 @@ jobs:
       # Keep tests deterministic in CI
       NODE_ENV: test
       POSTGRES_HOST: 127.0.0.1
-      POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-      DATABASE_URL: postgres://postgres:postgres@127.0.0.1:${{ job.services.postgres.ports[5432] }}/central_library
       AUTO_CREATE_DB: "true"
       SEED: "false"
     services:
@@ -50,6 +48,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql-client
+
+      - name: Expose Postgres port
+        run: |
+          echo "POSTGRES_PORT=${{ job.services.postgres.ports[5432] }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=postgres://postgres:postgres@127.0.0.1:${{ job.services.postgres.ports[5432] }}/central_library" >> $GITHUB_ENV
 
       - name: Debug env
         run: |
