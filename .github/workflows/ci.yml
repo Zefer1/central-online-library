@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["master", "main"]
   pull_request:
 
 jobs:
@@ -12,6 +12,20 @@ jobs:
     defaults:
       run:
         working-directory: desafio05-api
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: central_library
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d central_library"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
     steps:
       - uses: actions/checkout@v4
 
@@ -24,10 +38,26 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Wait for Postgres
+        run: |
+          echo "Waiting for Postgres on localhost:5432..."
+          for i in {1..30}; do
+            if nc -z localhost 5432; then
+              echo "Postgres is reachable."
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Postgres did not become reachable in time." >&2
+          exit 1
+
       - name: Test
         env:
           # Keep tests deterministic in CI
           NODE_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/central_library
+          AUTO_CREATE_DB: "true"
+          SEED: "false"
         run: npm test
 
   front:
