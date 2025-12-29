@@ -93,7 +93,15 @@ if (IS_PROD) {
     .split(',')
     .map(s => s.trim())
     .filter(Boolean);
-  app.use(cors({ origin: CORS_ORIGIN === '*' ? undefined : origins }));
+  let corsOrigin;
+  if (CORS_ORIGIN === '*') {
+    corsOrigin = undefined;
+  } else if (origins.length === 1) {
+    corsOrigin = origins[0];
+  } else {
+    corsOrigin = origins;
+  }
+  app.use(cors({ origin: corsOrigin }));
 } else {
   app.use(cors());
 }
