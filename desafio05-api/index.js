@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs';
 import { ratingsRouter } from './bookRatings.js';
 import { generateBookSummary } from './aiService.js';
 import { isEnvAdminEnabled } from './authConfig.js';
+import { runMigrations } from './db.js';
 
 dotenv.config();
 
@@ -515,6 +516,17 @@ app.post('/api/books/:id/ai-summary', authMiddleware, aiSummaryLimiter, async (r
 
 // Book ratings routes (public + authenticated upsert)
 app.use('/api/books/:bookId/ratings', ratingsRouter);
+
+// Admin endpoint to run migrations
+app.post('/admin/run-migrations', async (req, res) => {
+  try {
+    await runMigrations(); // Function already defined in db.js
+    res.json({ message: 'Migrações aplicadas com sucesso' });
+  } catch (err) {
+    console.error('Erro ao aplicar migrações:', err);
+    res.status(500).json({ error: 'Erro ao aplicar migrações' });
+  }
+});
 
 // Global error handler
 app.use((err, req, res, _next) => {
