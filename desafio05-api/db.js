@@ -86,7 +86,7 @@ export async function ensureDatabase() {
   }
 }
 
-async function runMigrations() {
+export async function runMigrations() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS migrations (
       id SERIAL PRIMARY KEY,

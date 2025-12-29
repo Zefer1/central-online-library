@@ -9,11 +9,9 @@ import bcrypt from 'bcryptjs';
 import { ratingsRouter } from './bookRatings.js';
 import { generateBookSummary } from './aiService.js';
 import { isEnvAdminEnabled } from './authConfig.js';
-import { runMigrations } from './db.js';
+import { pool, ensureDatabase, seedIfEmpty, runMigrations } from './db.js';
 
 dotenv.config();
-
-import { pool, ensureDatabase, seedIfEmpty } from './db.js';
 
 const NODE_ENV = (process.env.NODE_ENV || '').toLowerCase();
 const IS_PROD = NODE_ENV === 'production';
@@ -519,12 +517,21 @@ app.use('/api/books/:bookId/ratings', ratingsRouter);
 
 // Admin endpoint to run migrations
 app.post('/admin/run-migrations', async (req, res) => {
+  const token = (process.env.MIGRATIONS_TOKEN || '').trim();
+  if (!token) {
+    return res.status(403).json({ error: { message: 'MIGRATIONS_TOKEN not configured' } });
+  }
+  const auth = (req.headers.authorization || '').toString();
+  if (!auth.startsWith('Bearer ') || auth.slice('Bearer '.length) !== token) {
+    return res.status(401).json({ error: { message: 'Unauthorized' } });
+  }
+
   try {
-    await runMigrations(); // Function already defined in db.js
-    res.json({ message: 'Migrações aplicadas com sucesso' });
+    await runMigrations();
+    return res.json({ message: 'Migrações aplicadas com sucesso' });
   } catch (err) {
     console.error('Erro ao aplicar migrações:', err);
-    res.status(500).json({ error: 'Erro ao aplicar migrações' });
+    return res.status(500).json({ error: { message: 'Erro ao aplicar migrações' } });
   }
 });
 
